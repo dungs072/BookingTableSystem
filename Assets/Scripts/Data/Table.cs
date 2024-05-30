@@ -30,7 +30,7 @@ public class Table : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     public void OnCancelTableClick()
     {
-        if (ClientId != -1) { return; }
+        if (ClientId == -1) { return; }
         if (gameMechanism.IsServer) { return; }
         UIManager.Instance.ToggleConfirmCancelNotification(Id, Floor.Id, true);
         DataManager.Instance.SetCurrentData(Floor.Id, Id);
