@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private TMP_Text ipAddressText;
     [SerializeField] private TMP_Text userConnectionsText;
+
+
     [Header("Book notification")]
     [SerializeField] private GameObject confirmBookNotificationPanel;
     [SerializeField] private TMP_Text confirmBookText;

@@ -12,6 +12,8 @@ public class Table : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public bool IsBooked { get; set; }
     public int ClientId { get; set; } = -1;
 
+    private List<int> clientIds = new List<int>();
+
     private GameMechanism gameMechanism;
     private NetworkInfo networkInfo;
     private void Start()
@@ -27,6 +29,7 @@ public class Table : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (gameMechanism.IsServer) { return; }
         UIManager.Instance.ToggleConfirmBookNotification(Id, Floor.Id, true);
         DataManager.Instance.SetCurrentData(Floor.Id, Id);
+        DataManager.Instance.RequestChooseTable();
     }
     public void OnCancelTableClick()
     {
@@ -34,6 +37,11 @@ public class Table : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (gameMechanism.IsServer) { return; }
         UIManager.Instance.ToggleConfirmCancelNotification(Id, Floor.Id, true);
         DataManager.Instance.SetCurrentData(Floor.Id, Id);
+    }
+    // asign this to button
+    public void OnCancelRequestChoosingTableClick()
+    {
+        DataManager.Instance.RequestCancelChoosingTable(Floor.Id, Id);
     }
 
     public void HandleBookTable(int clientId)
@@ -62,5 +70,21 @@ public class Table : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         if (networkInfo.NetworkId != ClientId) { return; }
         cancelButton.SetActive(false);
 
+    }
+    public void Dequeue(int number)
+    {
+        clientIds.Remove(number);
+    }
+    public void Enqueue(int number)
+    {
+        clientIds.Add(number);
+    }
+    public int GetCurrentRequestChoosingTable()
+    {
+        return clientIds[0];
+    }
+    public void ClearRequest()
+    {
+        clientIds.Clear();
     }
 }

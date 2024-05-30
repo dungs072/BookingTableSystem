@@ -8,8 +8,8 @@ public class GameMechanism : MonoBehaviour
     private bool isServer = false;
     private bool isClient = false;
 
-    public bool IsServer{get{return isServer;}}
-    public bool IsClient{get{return isClient;}}
+    public bool IsServer { get { return isServer; } }
+    public bool IsClient { get { return isClient; } }
 
     public void StartServer()
     {
@@ -20,7 +20,7 @@ public class GameMechanism : MonoBehaviour
     public void JoinServer()
     {
         string IPAddress = UIManager.Instance.GetIPAddressInput();
-        if(IPAddress.Trim().Length==0){return;}
+        if (IPAddress.Trim().Length == 0) { return; }
         client.ConnectToTcpServer(IPAddress);
         isClient = true;
         isServer = false;
@@ -29,14 +29,26 @@ public class GameMechanism : MonoBehaviour
 
     public void ClientSendBookingInfoToServer(int clientId, int floorId, int tableId)
     {
-        if(!isClient){return;}
+        if (!isClient) { return; }
         string message = $"Book:{clientId}:{floorId}:{tableId}";
         client.SendMessages(message);
     }
     public void ClientSendCancelInfoToServer(int clientId, int floorId, int tableId)
     {
-        if(!isClient){return;}
+        if (!isClient) { return; }
         string message = $"Cancel:{clientId}:{floorId}:{tableId}";
+        client.SendMessages(message);
+    }
+    public void ClientSendRequestBookingToServer(int clientId, int floorId, int tableId)
+    {
+        if (!isClient) { return; }
+        string message = $"RequestBooking:{clientId}:{floorId}:{tableId}";
+        client.SendMessages(message);
+    }
+    public void ClientSendRequestCancelChoosingTableToServer(int clientId, int floorId, int tableId)
+    {
+        if (!isClient) { return; }
+        string message = $"CancelChoosing:{clientId}:{floorId}:{tableId}";
         client.SendMessages(message);
     }
 
@@ -44,11 +56,11 @@ public class GameMechanism : MonoBehaviour
 
     public void ExitGame()
     {
-        if(isServer)
+        if (isServer)
         {
             server.OnApplicationQuit();
         }
-        if(isClient)
+        if (isClient)
         {
             client.OnApplicationQuit();
         }

@@ -98,15 +98,23 @@ public class TcpServer : MonoBehaviour
             {
                 string clientMessage = Encoding.ASCII.GetString(message, 0, bytesRead);
                 Debug.Log("Received: " + clientMessage);
-                if(clientMessage.Contains("Book"))
+                if (clientMessage.Contains("Book"))
                 {
                     QueueMainThreadAction(() => HandleBookTable(clientMessage));
                 }
-                else if(clientMessage.Contains("Cancel"))
+                else if (clientMessage.Contains("Cancel"))
                 {
                     QueueMainThreadAction(() => HandleCancelTable(clientMessage));
                 }
-                
+                else if (clientMessage.Contains("RequestBooking"))
+                {
+                    QueueMainThreadAction(() => HandleRequestBooking(clientMessage));
+                }
+                else if(clientMessage.Contains("CancelChoosing"))
+                {
+                    QueueMainThreadAction(() => HandleRequestCancelBooking(clientMessage));
+                }
+
                 byte[] buffer = Encoding.ASCII.GetBytes("Message received");
                 clientStream.Write(buffer, 0, buffer.Length);
                 clientStream.Flush();
@@ -134,8 +142,17 @@ public class TcpServer : MonoBehaviour
         int clientId = int.Parse(texts[1]);
         int floorId = int.Parse(texts[2]);
         int tableId = int.Parse(texts[3]);
-        DataManager.Instance.SetBookedTable(clientId, floorId, tableId);
-        BroadcastMessages(message);
+        Table table = DataManager.Instance.GetTable(floorId, tableId);
+        if (clientId == table.GetCurrentRequestChoosingTable())
+        {
+            DataManager.Instance.SetBookedTable(clientId, floorId, tableId);
+            BroadcastMessages(message);
+        }
+        else
+        {
+            // response to specific clients
+        }
+
     }
     private void HandleCancelTable(string message)
     {
@@ -145,6 +162,22 @@ public class TcpServer : MonoBehaviour
         int tableId = int.Parse(texts[3]);
         DataManager.Instance.SetCanceledTable(clientId, floorId, tableId);
         BroadcastMessages(message);
+    }
+    private void HandleRequestBooking(string message)
+    {
+        string[] texts = message.Split(":");
+        int clientId = int.Parse(texts[1]);
+        int floorId = int.Parse(texts[2]);
+        int tableId = int.Parse(texts[3]);
+        DataManager.Instance.SetRequestBookingTable(clientId, floorId, tableId);
+    }
+     private void HandleRequestCancelBooking(string message)
+    {
+        string[] texts = message.Split(":");
+        int clientId = int.Parse(texts[1]);
+        int floorId = int.Parse(texts[2]);
+        int tableId = int.Parse(texts[3]);
+        DataManager.Instance.SetRequestCancelBookingTable(clientId, floorId, tableId);
     }
 
     public void BroadcastMessages(string message)

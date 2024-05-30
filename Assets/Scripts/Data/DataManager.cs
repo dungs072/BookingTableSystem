@@ -40,9 +40,18 @@ public class DataManager : MonoBehaviour
         this.floorId = floorId;
         this.tableId = tableId;
     }
+    public void RequestChooseTable()
+    {
+        gameMechanism.ClientSendRequestBookingToServer(networkInfo.NetworkId, floorId,tableId);
+    }
+    public void RequestCancelChoosingTable(int floorId, int tableId)
+    {
+        gameMechanism.ClientSendRequestCancelChoosingTableToServer(networkInfo.NetworkId, floorId, tableId);
+    }
     public void SetBookedTable(int clientId, int floorId, int tableId)
     {
         Table table = floorDict[floorId].TableDict[tableId];
+
         table.ClientId = clientId;
         
         if(clientId==networkInfo.NetworkId)
@@ -53,12 +62,27 @@ public class DataManager : MonoBehaviour
         {
             table.HandleBookTable(clientId);
         }
+        table.ClearRequest();
     }
     public void SetCanceledTable(int clientId, int floorId, int tableId)
     {
         Table table = floorDict[floorId].TableDict[tableId];
         table.ClientId = -1;
         table.HandleCancelBookTable();
+    }
+    public void SetRequestBookingTable(int clientId, int floorId, int tableId)
+    {
+        Table table = floorDict[floorId].TableDict[tableId];
+        table.Enqueue(clientId);
+    }
+    public void SetRequestCancelBookingTable(int clientId, int floorId, int tableId)
+    {
+        Table table = floorDict[floorId].TableDict[tableId];
+        table.Dequeue(clientId);
+    }
+    public Table GetTable(int floorId, int tableId)
+    {
+        return floorDict[floorId].TableDict[tableId];
     }
 
     #region UI
