@@ -42,13 +42,13 @@ public class GameMechanism : MonoBehaviour
     public void ClientSendRequestBookingToServer(int clientId, int floorId, int tableId)
     {
         if (!isClient) { return; }
-        string message = $"RequestBooking:{clientId}:{floorId}:{tableId}";
+        string message = $"Request:{clientId}:{floorId}:{tableId}";
         client.SendMessages(message);
     }
     public void ClientSendRequestCancelChoosingTableToServer(int clientId, int floorId, int tableId)
     {
         if (!isClient) { return; }
-        string message = $"CancelChoosing:{clientId}:{floorId}:{tableId}";
+        string message = $"RejectChoosing:{clientId}:{floorId}:{tableId}";
         client.SendMessages(message);
     }
 

@@ -50,6 +50,7 @@ public class DataManager : MonoBehaviour
     }
     public void SetBookedTable(int clientId, int floorId, int tableId)
     {
+        
         Table table = floorDict[floorId].TableDict[tableId];
 
         table.ClientId = clientId;
@@ -63,12 +64,14 @@ public class DataManager : MonoBehaviour
             table.HandleBookTable(clientId);
         }
         table.ClearRequest();
+        floorDict[floorId].ChangeStateButton();
     }
     public void SetCanceledTable(int clientId, int floorId, int tableId)
     {
         Table table = floorDict[floorId].TableDict[tableId];
         table.ClientId = -1;
         table.HandleCancelBookTable();
+        floorDict[floorId].ChangeStateButton();
     }
     public void SetRequestBookingTable(int clientId, int floorId, int tableId)
     {
@@ -84,6 +87,10 @@ public class DataManager : MonoBehaviour
     {
         return floorDict[floorId].TableDict[tableId];
     }
+    public Floor GetFloor(int floorId)
+    {
+        return floorDict[floorId];
+    }
 
     #region UI
     public void ConfirmBookTable()
@@ -93,6 +100,10 @@ public class DataManager : MonoBehaviour
     public void CancelBookTable()
     {
         gameMechanism.ClientSendCancelInfoToServer(networkInfo.NetworkId, floorId, tableId);
+    }
+    public void OnCancelRequestChoosingTableClick()
+    {
+        RequestCancelChoosingTable(floorId, tableId);
     }
     #endregion
 

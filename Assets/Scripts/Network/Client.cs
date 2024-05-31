@@ -60,6 +60,11 @@ public class Client : MonoBehaviour
                             int clientId = int.Parse(serverMessage.Split(":")[1]);
                             networkInfo.NetworkId = clientId;
                         }
+                        if(serverMessage.Contains("InitializeFloor"))
+                        {
+                            QueueMainThreadAction(() =>  SerializeInitializeTableData(serverMessage));
+                           
+                        }
                         if (serverMessage.Contains("Book"))
                         {
                             string[] texts = serverMessage.Split(":");
@@ -75,6 +80,10 @@ public class Client : MonoBehaviour
                             int floorId = int.Parse(texts[2]);
                             int tableId = int.Parse(texts[3]);
                             QueueMainThreadAction(() => DataManager.Instance.SetCanceledTable(clientId, floorId, tableId));
+                        }
+                        if(serverMessage.Contains("response"))
+                        {
+                            QueueMainThreadAction(()=> UIManager.Instance.ToggleGeneralNotification(true, serverMessage));
                         }
                         Debug.Log("Server message received: " + serverMessage);
                     }
@@ -108,6 +117,24 @@ public class Client : MonoBehaviour
         catch (SocketException socketException)
         {
             Debug.Log("Socket exception: " + socketException);
+        }
+    }
+    private void SerializeInitializeTableData(string serverMessage)
+    {
+        string[] rows = serverMessage.Split("\n");
+        for(int i =1;i<rows.Length;i++)
+        {
+            if(rows[i].Length==0){continue;}
+            string[] cols = rows[i].Split(":");
+            int floorId = int.Parse(cols[0]);
+            int tableId = int.Parse(cols[1]);
+            int clientId = int.Parse(cols[2]);
+            Table table = DataManager.Instance.GetTable(floorId, tableId);
+            table.HandleBookTable(clientId);
+        }
+        foreach(var floor in DataManager.Instance.Floors)
+        {
+            floor.ChangeStateButton();
         }
     }
 

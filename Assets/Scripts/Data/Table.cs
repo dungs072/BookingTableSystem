@@ -9,7 +9,6 @@ public class Table : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] private Image tableIcon;
     [field: SerializeField] public int Id { get; private set; }
     [field: SerializeField] public Floor Floor { get; private set; }
-    public bool IsBooked { get; set; }
     public int ClientId { get; set; } = -1;
 
     private List<int> clientIds = new List<int>();
@@ -38,11 +37,7 @@ public class Table : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         UIManager.Instance.ToggleConfirmCancelNotification(Id, Floor.Id, true);
         DataManager.Instance.SetCurrentData(Floor.Id, Id);
     }
-    // asign this to button
-    public void OnCancelRequestChoosingTableClick()
-    {
-        DataManager.Instance.RequestCancelChoosingTable(Floor.Id, Id);
-    }
+   
 
     public void HandleBookTable(int clientId)
     {
@@ -77,6 +72,7 @@ public class Table : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     public void Enqueue(int number)
     {
+        if(clientIds.Contains(number)) { return; }
         clientIds.Add(number);
     }
     public int GetCurrentRequestChoosingTable()
