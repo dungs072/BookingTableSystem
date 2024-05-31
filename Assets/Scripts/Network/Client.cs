@@ -59,6 +59,7 @@ public class Client : MonoBehaviour
                         {
                             int clientId = int.Parse(serverMessage.Split(":")[1]);
                             networkInfo.NetworkId = clientId;
+                            QueueMainThreadAction(() =>  UIManager.Instance.SetNetworkIdText(clientId));
                         }
                         if(serverMessage.Contains("InitializeFloor"))
                         {

@@ -13,8 +13,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject joinPanel;
 
     [SerializeField] private TMP_Text ipAddressText;
-    [SerializeField] private TMP_Text userConnectionsText;
-
+    
+    [SerializeField] private TMP_Text titleInfo2Text;
 
     [Header("Book notification")]
     [SerializeField] private GameObject confirmBookNotificationPanel;
@@ -49,7 +49,11 @@ public class UIManager : MonoBehaviour
     }
     public void SetUserConnectionsText(int numberUserConnections)
     {
-        userConnectionsText.text = "User connections: " + numberUserConnections.ToString();
+        titleInfo2Text.text = "User connections: " + numberUserConnections.ToString();
+    }
+    public void SetNetworkIdText(int networkId)
+    {
+        titleInfo2Text.text = "Network Id: "+networkId.ToString();
     }
 
     public string GetIPAddressInput()

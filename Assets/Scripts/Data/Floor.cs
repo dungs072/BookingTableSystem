@@ -44,7 +44,7 @@ public class Floor : MonoBehaviour
         else
         {
             floorButton.color = Color.white;
-            floorButtonText.text = $"Floor {Id}\n{count} left";
+            floorButtonText.text = $"Floor {Id}\n({count} left)";
         }
     }
 }
