@@ -8,6 +8,8 @@ public class NetworkInfo : MonoBehaviour
 {
     [Header("Please dont edit that")]
     [SerializeField] private int networkId;
+    public string ClientName{get;set;}
+    public string ClientPhoneNumber{get;set;}
     public int NetworkId
     {
         get

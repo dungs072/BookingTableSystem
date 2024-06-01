@@ -48,13 +48,19 @@ public class DataManager : MonoBehaviour
     {
         gameMechanism.ClientSendRequestCancelChoosingTableToServer(networkInfo.NetworkId, floorId, tableId);
     }
-    public void SetBookedTable(int clientId, int floorId, int tableId)
+    public void LockTableToAllClient(int floorId, int tableId, bool state)
+    {
+        gameMechanism.ServerSendLockTable(floorId,tableId,state);
+    }
+    public void SetBookedTable(int clientId, int floorId, int tableId, 
+                                string clientName="", string phoneNumber="")
     {
         
         Table table = floorDict[floorId].TableDict[tableId];
 
         table.ClientId = clientId;
-        
+        table.ClientName = clientName;
+        table.ClientPhoneNumber = phoneNumber;        
         if(clientId==networkInfo.NetworkId)
         {
             table.HandleBookTableByYourself(clientId);
@@ -95,7 +101,8 @@ public class DataManager : MonoBehaviour
     #region UI
     public void ConfirmBookTable()
     {
-        gameMechanism.ClientSendBookingInfoToServer(networkInfo.NetworkId, floorId, tableId);
+        gameMechanism.ClientSendBookingInfoToServer(networkInfo.NetworkId, floorId, tableId, 
+                                    networkInfo.ClientName, networkInfo.ClientPhoneNumber);
     }
     public void CancelBookTable()
     {

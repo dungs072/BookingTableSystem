@@ -59,12 +59,12 @@ public class Client : MonoBehaviour
                         {
                             int clientId = int.Parse(serverMessage.Split(":")[1]);
                             networkInfo.NetworkId = clientId;
-                            QueueMainThreadAction(() =>  UIManager.Instance.SetNetworkIdText(clientId));
+                            QueueMainThreadAction(() => UIManager.Instance.SetNetworkIdText(clientId));
                         }
-                        if(serverMessage.Contains("InitializeFloor"))
+                        if (serverMessage.Contains("InitializeFloor"))
                         {
-                            QueueMainThreadAction(() =>  SerializeInitializeTableData(serverMessage));
-                           
+                            QueueMainThreadAction(() => SerializeInitializeTableData(serverMessage));
+
                         }
                         if (serverMessage.Contains("Book"))
                         {
@@ -74,7 +74,7 @@ public class Client : MonoBehaviour
                             int tableId = int.Parse(texts[3]);
                             QueueMainThreadAction(() => DataManager.Instance.SetBookedTable(clientId, floorId, tableId));
                         }
-                        if(serverMessage.Contains("Cancel"))
+                        if (serverMessage.Contains("Cancel"))
                         {
                             string[] texts = serverMessage.Split(":");
                             int clientId = int.Parse(texts[1]);
@@ -82,9 +82,13 @@ public class Client : MonoBehaviour
                             int tableId = int.Parse(texts[3]);
                             QueueMainThreadAction(() => DataManager.Instance.SetCanceledTable(clientId, floorId, tableId));
                         }
-                        if(serverMessage.Contains("response"))
+                        if (serverMessage.Contains("response"))
                         {
-                            QueueMainThreadAction(()=> UIManager.Instance.ToggleGeneralNotification(true, serverMessage));
+                            QueueMainThreadAction(() => UIManager.Instance.ToggleGeneralNotification(true, serverMessage));
+                        }
+                        if (serverMessage.Contains("Lock"))
+                        {
+                            QueueMainThreadAction(() => LockTable(serverMessage));
                         }
                         Debug.Log("Server message received: " + serverMessage);
                     }
@@ -120,12 +124,13 @@ public class Client : MonoBehaviour
             Debug.Log("Socket exception: " + socketException);
         }
     }
+
     private void SerializeInitializeTableData(string serverMessage)
     {
         string[] rows = serverMessage.Split("\n");
-        for(int i =1;i<rows.Length;i++)
+        for (int i = 1; i < rows.Length; i++)
         {
-            if(rows[i].Length==0){continue;}
+            if (rows[i].Length == 0) { continue; }
             string[] cols = rows[i].Split(":");
             int floorId = int.Parse(cols[0]);
             int tableId = int.Parse(cols[1]);
@@ -133,10 +138,19 @@ public class Client : MonoBehaviour
             Table table = DataManager.Instance.GetTable(floorId, tableId);
             table.HandleBookTable(clientId);
         }
-        foreach(var floor in DataManager.Instance.Floors)
+        foreach (var floor in DataManager.Instance.Floors)
         {
             floor.ChangeStateButton();
         }
+    }
+    private void LockTable(string serverMessage)
+    {
+        string[] texts = serverMessage.Split(":");
+        int floorId = int.Parse(texts[1]);
+        int tableId = int.Parse(texts[2]);
+        bool state = bool.Parse(texts[3]);
+        Table table = DataManager.Instance.GetTable(floorId, tableId);
+        table.SetLockTable(state);
     }
 
     public void OnApplicationQuit()

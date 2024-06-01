@@ -14,6 +14,7 @@ public class CustomTcpClient
 public class TcpServer : MonoBehaviour
 {
     [SerializeField] private NetworkInfo networkInfo;
+    [SerializeField] private TextMovement textMovement;
     private TcpListener server;
     private Thread serverThread;
     private bool isRunning = false;
@@ -146,20 +147,20 @@ public class TcpServer : MonoBehaviour
         byte[] welcomeBuffer = Encoding.ASCII.GetBytes(clientId);
         clientStream.Write(welcomeBuffer, 0, welcomeBuffer.Length);
         clientStream.Flush();
-        return countToward-1;
+        return countToward - 1;
     }
     private void InitializeTableData(int clientId)
     {
         string message = "InitializeFloor\n";
-        foreach(var floor in DataManager.Instance.Floors)
+        foreach (var floor in DataManager.Instance.Floors)
         {
-            foreach(var table in floor.tables)
+            foreach (var table in floor.tables)
             {
-                if(table.ClientId==-1){continue;}
-                message += $"{floor.Id}:{table.Id}:{table.ClientId}\n"; 
+                if (table.ClientId == -1) { continue; }
+                message += $"{floor.Id}:{table.Id}:{table.ClientId}\n";
             }
         }
-        SendMessageToSpecificClient(clientId,message);
+        SendMessageToSpecificClient(clientId, message);
     }
 
     private void RemoveClient(TcpClient client)
@@ -179,17 +180,22 @@ public class TcpServer : MonoBehaviour
         int clientId = int.Parse(texts[1]);
         int floorId = int.Parse(texts[2]);
         int tableId = int.Parse(texts[3]);
+
         Table table = DataManager.Instance.GetTable(floorId, tableId);
         if (clientId == table.GetCurrentRequestChoosingTable())
         {
-            DataManager.Instance.SetBookedTable(clientId, floorId, tableId);
+            string clientName = texts[4];
+            string clientPhoneNumber = texts[5];
+            DataManager.Instance.SetBookedTable(clientId, floorId, tableId, 
+                                            clientName, clientPhoneNumber);
             BroadcastMessages(message);
-            SendMessageToSpecificClient(clientId,$"Server response: book table {tableId} at floor {floorId} successfully");
+            SendMessageToSpecificClient(clientId, $"Server response: book table {tableId} at floor {floorId} successfully");
+            textMovement.EnqueueText($"Table {tableId} at Floor {floorId} has booked");
         }
         else
         {
-            
-            SendMessageToSpecificClient(clientId,"Server response: this table is choosing by someone. \nPlease wait or choose another one");
+
+            SendMessageToSpecificClient(clientId, "Server response: this table is choosing by someone. \nPlease wait or choose another one");
             // response to specific clients
         }
 

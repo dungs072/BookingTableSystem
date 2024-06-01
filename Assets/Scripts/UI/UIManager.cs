@@ -15,6 +15,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_Text ipAddressText;
     
     [SerializeField] private TMP_Text titleInfo2Text;
+    [SerializeField] private TMP_Text phoneNumberText;
+    [SerializeField] private TMP_Text nameUserText;
 
     [Header("Book notification")]
     [SerializeField] private GameObject confirmBookNotificationPanel;
@@ -26,8 +28,18 @@ public class UIManager : MonoBehaviour
     [Header("General notification")]
     [SerializeField] private GameObject generalNotification;
     [SerializeField] private TMP_Text generalText;
+    [Header("Client Info booking info")]
+    [SerializeField] private GameObject clientBookingInfoPanel;
+    [SerializeField] private TMP_Text tableFloorInfo;
+    [SerializeField] private TMP_InputField phoneNumberInfo;
+    [SerializeField] private TMP_InputField nameClientInfo;
 
+
+    [Header("Other")]
     [SerializeField] private TMP_InputField ipAddressInput;
+    [SerializeField] private TMP_InputField nameInput;
+    [SerializeField] private TMP_InputField phoneInput;
+    [SerializeField] private GameObject topNotification;
     public static UIManager Instance { get; private set; }
 
     private void Awake()
@@ -42,6 +54,10 @@ public class UIManager : MonoBehaviour
             Destroy(this);
         }
     }
+    public void ToggleTopNotification(bool state)
+    {
+        topNotification.SetActive(state);
+    }
 
     public void SetIPAddressText(string ipAddress)
     {
@@ -55,10 +71,26 @@ public class UIManager : MonoBehaviour
     {
         titleInfo2Text.text = "Network Id: "+networkId.ToString();
     }
+    public void SetUserNameText(string userName)
+    {
+        nameUserText.text = "Name: "+userName;
+    }
+    public void SetPhoneText(string phoneText)
+    {
+        phoneNumberText.text = "Phone: "+phoneText;
+    }
 
     public string GetIPAddressInput()
     {
         return ipAddressInput.text;
+    }
+    public string GetNameInput()
+    {
+        return nameInput.text;
+    }
+    public string GetPhoneInput()
+    {
+        return phoneInput.text;
     }
     public void ToggleGamePanel(bool state)
     {
@@ -106,6 +138,14 @@ public class UIManager : MonoBehaviour
     {
         generalNotification.SetActive(state);
         generalText.text = message;
+    }
+    public void ToggleClientBookingInfoPanel(bool state, string tableFloor, 
+                                    string clientName, string phoneNumber)
+    {
+        clientBookingInfoPanel.SetActive(state);
+        tableFloorInfo.text = tableFloor;
+        nameClientInfo.text = clientName;
+        phoneNumberInfo.text = phoneNumber;
     }
     
 }
