@@ -135,8 +135,13 @@ public class Client : MonoBehaviour
             int floorId = int.Parse(cols[0]);
             int tableId = int.Parse(cols[1]);
             int clientId = int.Parse(cols[2]);
+            bool state = bool.Parse(cols[3]);
             Table table = DataManager.Instance.GetTable(floorId, tableId);
-            table.HandleBookTable(clientId);
+            if(clientId!=-1)
+            {
+                table.HandleBookTable(clientId);
+            }
+            table.SetLockTable(state);
         }
         foreach (var floor in DataManager.Instance.Floors)
         {

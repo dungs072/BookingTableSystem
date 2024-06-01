@@ -40,6 +40,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TMP_InputField nameInput;
     [SerializeField] private TMP_InputField phoneInput;
     [SerializeField] private GameObject topNotification;
+    [SerializeField] private GameObject blurPage;
     public static UIManager Instance { get; private set; }
 
     private void Awake()
@@ -112,6 +113,7 @@ public class UIManager : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(CountDownToRequest(tableId,floorId));
         }
+        blurPage.SetActive(state);
         confirmBookNotificationPanel.SetActive(state);
     }
     private IEnumerator CountDownToRequest(int tableId, int floorId)
@@ -132,10 +134,12 @@ public class UIManager : MonoBehaviour
         {
             confirmCancelText.text = $"Are you sure about canceling booking table {tableId} at floor {floorId}?";
         }
+        blurPage.SetActive(state);
         confirmCancelNotificationPanel.SetActive(state);
     }
     public void ToggleGeneralNotification(bool state, string message)
     {
+        blurPage.SetActive(state);
         generalNotification.SetActive(state);
         generalText.text = message;
     }
@@ -146,6 +150,7 @@ public class UIManager : MonoBehaviour
         tableFloorInfo.text = tableFloor;
         nameClientInfo.text = clientName;
         phoneNumberInfo.text = phoneNumber;
+        blurPage.SetActive(state);
     }
     
 }

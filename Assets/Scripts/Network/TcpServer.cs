@@ -156,8 +156,7 @@ public class TcpServer : MonoBehaviour
         {
             foreach (var table in floor.tables)
             {
-                if (table.ClientId == -1) { continue; }
-                message += $"{floor.Id}:{table.Id}:{table.ClientId}\n";
+                message += $"{floor.Id}:{table.Id}:{table.ClientId}:{table.IsLocked}\n";
             }
         }
         SendMessageToSpecificClient(clientId, message);

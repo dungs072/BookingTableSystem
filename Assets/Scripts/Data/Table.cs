@@ -132,4 +132,14 @@ public class Table : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         clientIds.Clear();
     }
+    public void ResetTable()
+    {
+        ClientId = -1;
+        ClientName = "";
+        ClientPhoneNumber = "";
+        clientIds.Clear();
+        SetLockTable(false);
+        HandleCancelBookTable();
+        
+    }
 }

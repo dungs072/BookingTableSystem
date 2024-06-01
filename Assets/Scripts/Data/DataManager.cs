@@ -97,6 +97,16 @@ public class DataManager : MonoBehaviour
     {
         return floorDict[floorId];
     }
+    public void ResetData()
+    {
+        foreach(var floor in floors)
+        {
+            foreach(var table in floor.tables)
+            {
+                table.ResetTable();
+            }
+        }
+    }
 
     #region UI
     public void ConfirmBookTable()

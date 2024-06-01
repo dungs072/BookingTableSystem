@@ -73,6 +73,7 @@ public class GameMechanism : MonoBehaviour
 
     public void ExitGame()
     {
+        ResetData();
         if (isServer)
         {
             server.OnApplicationQuit();
@@ -84,5 +85,12 @@ public class GameMechanism : MonoBehaviour
 
         isServer = false;
         isClient = false;
+
+        
+    }
+
+    private static void ResetData()
+    {
+        DataManager.Instance.ResetData();
     }
 }
