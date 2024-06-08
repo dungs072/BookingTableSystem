@@ -29,7 +29,7 @@ public class TextMovement : MonoBehaviour
             float value = Mathf.Abs(rectTransform.anchoredPosition.x - targetPosition.x);
             string notificationStr = notificationQueue.Dequeue();
             notification.text = notificationStr;
-            while (value > 5f)
+            while (value > 15f)
             {
                 float x = rectTransform.anchoredPosition.x - moveSpeed * Time.deltaTime;
                 rectTransform.anchoredPosition = new Vector2(x, rectTransform.anchoredPosition.y);

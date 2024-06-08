@@ -88,6 +88,10 @@ public class GameMechanism : MonoBehaviour
 
         
     }
+    public void CloseGame()
+    {
+        Application.Quit();
+    }
 
     private static void ResetData()
     {

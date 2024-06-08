@@ -73,6 +73,12 @@ public class Client : MonoBehaviour
                             int floorId = int.Parse(texts[2]);
                             int tableId = int.Parse(texts[3]);
                             QueueMainThreadAction(() => DataManager.Instance.SetBookedTable(clientId, floorId, tableId));
+                            if(clientId==networkInfo.NetworkId)
+                            {
+                                string message = $"Server response: book table {tableId} on the floor {floorId} successfully";
+                                QueueMainThreadAction(() => UIManager.Instance.ToggleGeneralNotification(true, message));
+                            }
+                            
                         }
                         if (serverMessage.Contains("Cancel"))
                         {

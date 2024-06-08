@@ -122,7 +122,7 @@ public class UIManager : MonoBehaviour
         while(currentTime>=0f)
         {
             currentTime-=Time.deltaTime;
-            confirmBookText.text = $"Are you sure about booking table {tableId} at floor {floorId}?\n Time remaining: {currentTime.ToString("0")}s";
+            confirmBookText.text = $"Are you sure about booking table {tableId} on the floor {floorId}?\n Time remaining: {currentTime.ToString("0")}s";
             yield return null;
         }
         ToggleConfirmBookNotification(tableId, floorId,false);
@@ -132,7 +132,7 @@ public class UIManager : MonoBehaviour
     {
         if(state)
         {
-            confirmCancelText.text = $"Are you sure about canceling booking table {tableId} at floor {floorId}?";
+            confirmCancelText.text = $"Are you sure about canceling booking table {tableId} on the floor {floorId}?";
         }
         blurPage.SetActive(state);
         confirmCancelNotificationPanel.SetActive(state);

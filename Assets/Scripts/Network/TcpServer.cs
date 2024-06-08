@@ -188,13 +188,13 @@ public class TcpServer : MonoBehaviour
             DataManager.Instance.SetBookedTable(clientId, floorId, tableId, 
                                             clientName, clientPhoneNumber);
             BroadcastMessages(message);
-            SendMessageToSpecificClient(clientId, $"Server response: book table {tableId} at floor {floorId} successfully");
-            textMovement.EnqueueText($"Table {tableId} at Floor {floorId} has booked");
+            //SendMessageToSpecificClient(clientId, $"Server response: book table {tableId} at floor {floorId} successfully");
+            textMovement.EnqueueText($"Table {tableId} on the Floor {floorId} has been booked");
         }
         else
         {
 
-            SendMessageToSpecificClient(clientId, "Server response: this table is choosing by someone. \nPlease wait or choose another one");
+            SendMessageToSpecificClient(clientId, "Server response: this table is being chose by someone. \nPlease wait or choose another one");
             // response to specific clients
         }
 

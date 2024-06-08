@@ -35,7 +35,7 @@ public class Table : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             if (gameMechanism.IsServer)
             {
                 UIManager.Instance.ToggleClientBookingInfoPanel(true,
-                    $"Table {Id} at Floor {Floor.Id}", ClientName, ClientPhoneNumber);
+                    $"Table {Id} on the Floor {Floor.Id}", ClientName, ClientPhoneNumber);
             }
         }
         else if (gameMechanism.IsServer) { return; }
